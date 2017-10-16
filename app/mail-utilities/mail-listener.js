@@ -1,4 +1,5 @@
 const mp = require('./mail-parser');
+const axios = require('axios')
 var mailPort = 993
 var MailListener = require("mail-listener2");
 
@@ -13,9 +14,8 @@ var mailListener = new MailListener({
   debug: null, // Or your custom function with only one incoming argument. Default: null
   tlsOptions: { rejectUnauthorized: false },
   mailbox: "INBOX", // mailbox to monitor
-  //searchFilter: ["UNSEEN", "FLAGGED"],
   searchFilter: ["UNSEEN"], // the search filter being used after an IDLE notification has been retrieved
-  markSeen: false, // all fetched email willbe marked as seen and not fetched next time
+  markSeen: true, // all fetched email willbe marked as seen and not fetched next time
   fetchUnreadOnStart: false, // use it only if you want to get all unread email on lib start. Default is `false`,
   mailParserOptions: {streamAttachments: false}, // options to be passed to mailParser lib.
   attachments: false, // download attachments as they are encountered to the project directory
@@ -52,16 +52,13 @@ mailListener.on("mail", function(mail, seqno, attributes){
     }
     there's other stuff but it's metadata/not relevant
     */
+    console.log("Mail received")
     mp.parseEmail(mail.text, mail.subject, mail.from[0].address, mail.from[0].name, mail.date)
-    //console.log("emailParsed", mail);
 });
 
 mailListener.on("attachment", function(attachment){
     console.log(attachment.path);
 });
 
-mailListener.start(); // start listening
+mailListener.start();
 console.log("Listening for mails at port " + mailPort);
-
-// it's possible to access imap object from node-imap library for performing additional actions. E.x.
-//mailListener.imap.move(:msguids, :mailboxes, function(){})
