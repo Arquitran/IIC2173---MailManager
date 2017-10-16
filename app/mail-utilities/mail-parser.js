@@ -6,7 +6,6 @@ module.exports = {
     parseEmail: function(body, subject, email, name, date) {
         //Receive extra information in case it's needed in the future
         let t0 = body.split("\n")
-        console.log(t0)
         let jsonB
         for (i = 0; i < t0.length -1; i++) {
             let tl = t0[i].split(/\s+/)
@@ -30,7 +29,7 @@ module.exports = {
                     user: email
                 }
             } else {
-                jsonB = null
+                continue
             }
             //Axios is a temporary solution until the queue is chosen
             axios.post(url, jsonB)
