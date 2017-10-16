@@ -7,7 +7,7 @@ module.exports = {
     // Receive extra information in case it's needed in the future
     const t0 = body.split('\n');
     let jsonB;
-    for (i = 0; i < t0.length - 1; i++) {
+    for (let i = 0; i < t0.length - 1; i += 1) {
       const tl = t0[i].split(/\s+/);
       if (tl[0] === 'buy') {
         jsonB = {
