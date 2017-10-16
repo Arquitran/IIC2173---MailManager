@@ -14,19 +14,20 @@ module.exports = {
                 jsonB = {
                     action: "buy",
                     product: tl[1],
-                    ammount: tl[2]
+                    ammount: tl[2],
+                    user: email
                 }
             } else if (tl[0] === "view") {
                 jsonB = {
                     action: "view",
                     product: tl[1],
-                    ammount: null
+                    user: email
                 }
             } else if (tl[0] === "category") {
                 jsonB = {
                     action: "category",
                     product: tl[1],
-                    ammount: null
+                    user: email
                 }
             } else {
                 jsonB = null
