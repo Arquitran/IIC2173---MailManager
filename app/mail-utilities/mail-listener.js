@@ -1,7 +1,5 @@
 const MailListener = require('mail-listener2');
-const http = require('http');
 const mp = require('./mail-parser');
-const sender = require('./mail-sender');
 
 const mailPort = 993;
 const config = {
@@ -53,7 +51,7 @@ mailListener.on('mail', (mail, seqno, attributes) => {
     there's other stuff but it's metadata/not relevant
     */
   console.log('Mail received');
-  const parsedJson = mp.parseEmail(
+  mp.parseEmail(
     mail.text,
     mail.subject,
     mail.from[0].address,
