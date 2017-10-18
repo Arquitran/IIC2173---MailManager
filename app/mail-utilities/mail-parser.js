@@ -1,13 +1,48 @@
-const axios = require('axios');
-// WIP while queue is defined
-const url = 'http://httpbin.org/post';
+const sender = require('./mail-sender');
+const http = require('http');
+
+function getResponse(jsonRes) {
+  let baseUrl = process.env.QUEUE_URL || 'http://arqss14.ing.puc.cl';
+  baseUrl += ':3000';
+  let url = baseUrl;
+  console.log(jsonRes.action);
+  switch (jsonRes.action) {
+    case 'view':
+    case 'buy':
+      url = `${url}/productos`;
+      break;
+    case 'category':
+      url = `${url}/categorias`;
+      break;
+    default:
+  }
+  console.log(url);
+
+  http.get(url, (resp) => {
+    let data = '';
+
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    resp.on('end', () => {
+      console.log(data);
+      sender(
+        JSON.parse(data),
+        jsonRes.user,
+      );
+    });
+  }).on('error', (err) => {
+    console.log(`Error: ${err.message}`);
+  });
+}
 
 module.exports = {
   parseEmail(body, subject, email, name, date) {
     // Receive extra information in case it's needed in the future
     const t0 = body.split('\n');
     let jsonB;
-    for (i = 0; i < t0.length - 1; i++) {
+    for (let i = 0; i < t0.length - 1; i += 1) {
       const tl = t0[i].split(/\s+/);
       if (tl[0] === 'buy') {
         jsonB = {
@@ -29,16 +64,10 @@ module.exports = {
           user: email,
         };
       } else {
+        sender('Comando inválido', email);
         continue;
       }
-      // Axios is a temporary solution until the queue is chosen
-      axios.post(url, jsonB)
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      getResponse(jsonB);
     }
   },
 };

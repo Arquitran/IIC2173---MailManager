@@ -1,10 +1,8 @@
+const MailListener = require('mail-listener2');
 const mp = require('./mail-parser');
-const axios = require('axios');
 
 const mailPort = 993;
-const MailListener = require('mail-listener2');
-
-const mailListener = new MailListener({
+const config = {
   username: 'info.arquitran@gmail.com',
   password: 'hansfindel',
   host: 'imap.gmail.com',
@@ -21,10 +19,9 @@ const mailListener = new MailListener({
   mailParserOptions: { streamAttachments: false }, // options to be passed to mailParser lib.
   attachments: false, // download attachments as they are encountered to the project directory
   attachmentOptions: { directory: 'attachments/' }, // specify a download directory for attachments
-});
+};
 
-// stop listening
-// mailListener.stop();
+const mailListener = new MailListener(config);
 
 mailListener.on('server:connected', () => {
   console.log('imapConnected');
@@ -54,7 +51,13 @@ mailListener.on('mail', (mail, seqno, attributes) => {
     there's other stuff but it's metadata/not relevant
     */
   console.log('Mail received');
-  mp.parseEmail(mail.text, mail.subject, mail.from[0].address, mail.from[0].name, mail.date);
+  mp.parseEmail(
+    mail.text,
+    mail.subject,
+    mail.from[0].address,
+    mail.from[0].name,
+    mail.date,
+  );
 });
 
 mailListener.on('attachment', (attachment) => {
