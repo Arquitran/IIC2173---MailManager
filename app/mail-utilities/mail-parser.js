@@ -32,13 +32,15 @@ module.exports = {
         continue;
       }
       // Axios is a temporary solution until the queue is chosen
-      axios.post(url, jsonB)
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      // axios.post(url, jsonB)
+      //   .then((response) => {
+      //     console.log(response.data);
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
+
+      return jsonB;
     }
   },
 };
