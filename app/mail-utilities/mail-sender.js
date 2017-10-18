@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
 });
 
 
-module.exports = function sendMail(req, address, name) {
+module.exports = function sendMail(req, address) {
   const text = JSON.stringify(req);
   const mailOptions = {
     from: 'info.arquitran@gmail.com',

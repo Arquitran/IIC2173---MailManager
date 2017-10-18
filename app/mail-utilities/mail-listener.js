@@ -60,37 +60,6 @@ mailListener.on('mail', (mail, seqno, attributes) => {
     mail.from[0].name,
     mail.date,
   );
-
-  let url = `${process.env.QUEUE_URL}/mail`;
-  switch (parsedJson.action) {
-    case 'view':
-      url += `${url}/productos`;
-      break;
-    case 'category':
-      url += `${url}/categorias`;
-      break;
-    default:
-  }
-
-  http.get(url, (resp) => {
-    let data = '';
-
-    // A chunk of data has been recieved.
-    resp.on('data', (chunk) => {
-      data += chunk;
-    });
-
-    // The whole response has been received. Print out the result.
-    resp.on('end', () => {
-      sender(
-        JSON.parse(data),
-        mail.from[0].address,
-        mail.from[0].name,
-      );
-    });
-  }).on('error', (err) => {
-    console.log(`Error: ${err.message}`);
-  });
 });
 
 mailListener.on('attachment', (attachment) => {

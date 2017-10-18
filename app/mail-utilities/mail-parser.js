@@ -1,6 +1,42 @@
-const axios = require('axios');
+// const axios = require('axios');
 // WIP while queue is defined
-const url = 'http://httpbin.org/post';
+// const url = 'http://httpbin.org/post';
+
+const sender = require('./mail-sender');
+const http = require('http');
+
+function getResponse(jsonRes) {
+  const baseUrl = process.env.QUEUE_URL || 'http://arqss14.ing.puc.cl';
+
+  let url = `${baseUrl}/mail`;
+  switch (jsonRes.action) {
+    case 'view':
+      url += `${url}/productos`;
+      break;
+    case 'category':
+      url += `${url}/categorias`;
+      break;
+    default:
+  }
+  http.get(url, (resp) => {
+    let data = '';
+
+    // A chunk of data has been recieved.
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    // The whole response has been received. Print out the result.
+    resp.on('end', () => {
+      sender(
+        JSON.parse(data),
+        jsonRes.user,
+      );
+    });
+  }).on('error', (err) => {
+    console.log(`Error: ${err.message}`);
+  });
+}
 
 module.exports = {
   parseEmail(body, subject, email, name, date) {
@@ -40,7 +76,7 @@ module.exports = {
       //     console.log(error);
       //   });
 
-      return jsonB;
+      getResponse(jsonB);
     }
   },
 };
