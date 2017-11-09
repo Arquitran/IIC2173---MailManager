@@ -55,31 +55,55 @@ function getResponse(jsonRes) {
       break;
     case 'signup':
       url = `${apiUrl}/signup`;
+      var signupBody = {
+        "email": jsonRes.user,
+        "password": jsonRes.password
+      }
+      http.post(url {body: signupBody}, (resp) => {
+        let data = '';
+
+        resp.on('data', (chunk) => {
+          data += chunk;
+        });
+
+        resp.on('end', () => {
+          console.log(data);
+          sender(
+            JSON.parse(data),
+            jsonRes.user,
+          );
+        });
+      }).on('error', (err) => {
+        console.log(`Error: ${err.message}`);
+      });
       break;
     case 'signin':
       url = `${apiUrl}/signin`;
+      var signinBody = {
+        "email": jsonRes.user,
+        "password": jsonRes.password
+      }
+      http.post(url {body: signinBody}, (resp) => {
+        let data = '';
+
+        resp.on('data', (chunk) => {
+          data += chunk;
+        });
+
+        resp.on('end', () => {
+          console.log(data);
+          sender(
+            JSON.parse(data),
+            jsonRes.user,
+          );
+        });
+      }).on('error', (err) => {
+        console.log(`Error: ${err.message}`);
+      });
       break;
     default:
   }
   console.log(url);
-
-  http.post(url, (resp) => {
-    let data = '';
-
-    resp.on('data', (chunk) => {
-      data += chunk;
-    });
-
-    resp.on('end', () => {
-      console.log(data);
-      sender(
-        JSON.parse(data),
-        jsonRes.user,
-      );
-    });
-  }).on('error', (err) => {
-    console.log(`Error: ${err.message}`);
-  });
 }
 
 module.exports = {
