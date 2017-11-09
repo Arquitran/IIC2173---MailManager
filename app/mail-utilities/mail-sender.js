@@ -17,7 +17,7 @@ module.exports = function sendMail(req, address) {
     to: address,
     subject: 'Respuesta Arquitran',
     // text: req.body.text,
-    text,
+    text: 'Orden recibida con éxito.',
   };
 
   console.log(mailOptions);
