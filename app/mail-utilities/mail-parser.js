@@ -10,21 +10,25 @@ function getResponse(jsonRes) {
   console.log(jsonRes.action);
   switch (jsonRes.action) {
     case 'view':
-    case 'buy':
       url = `${url}/productos`;
+      break;
+    case 'buy':
+      url = `${apiUrl}/cart`;
       break;
     case 'category':
       url = `${url}/categorias`;
       break;
     case 'signup':
       url = `${apiUrl}/signup`;
+      break;
     case 'signin':
       url = `${apiUrl}/signin`;
+      break;
     default:
   }
   console.log(url);
 
-  http.get(url, (resp) => {
+  http.post(url, (resp) => {
     let data = '';
 
     resp.on('data', (chunk) => {
