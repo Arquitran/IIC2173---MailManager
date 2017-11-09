@@ -4,7 +4,7 @@ Commands accepted:
 
 signup [password]
 signin [password]
-buy [productName] [quantity]
+buy [productName] [quantity] [token]
 view [productName]
 
 To succesfully buy a product, you must put the signin command before it.

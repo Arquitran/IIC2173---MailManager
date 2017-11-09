@@ -11,9 +11,44 @@ function getResponse(jsonRes) {
   switch (jsonRes.action) {
     case 'view':
       url = `${url}/productos`;
+      http.get(url, (resp) => {
+        let data = '';
+
+        resp.on('data', (chunk) => {
+          data += chunk;
+        });
+
+        resp.on('end', () => {
+          console.log(data);
+          sender(
+            JSON.parse(data),
+            jsonRes.user,
+          );
+        });
+      }).on('error', (err) => {
+        console.log(`Error: ${err.message}`);
+      });
       break;
     case 'buy':
       url = `${apiUrl}/cart`;
+      http.post(url, {headers: {'Authorization': jsonRes.token}}(resp) => {
+        let data = '';
+
+        resp.on('data', (chunk) => {
+          data += chunk;
+        });
+
+        resp.on('end', () => {
+          //data += "Tu pedido fue correctamente ejecutado";
+          console.log(data);
+          sender(
+            JSON.parse(data),
+            jsonRes.user,
+          );
+        });
+      }).on('error', (err) => {
+        console.log(`Error: ${err.message}`);
+      });
       break;
     case 'category':
       url = `${url}/categorias`;
@@ -68,6 +103,7 @@ module.exports = {
           action: 'buy',
           product: tl[1],
           ammount: tl[2],
+          token: tl[3],
           user: email,
         };
       } else if (tl[0] === 'view') {
