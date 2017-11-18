@@ -9,6 +9,7 @@ function getResponse(jsonRes) {
   let apiUrl = 'https://arqss4.ing.puc.cl/api';
   console.log(jsonRes.action);
   switch (jsonRes.action) {
+
     case 'view':
       url = `${url}/productos`;
       http.get(url, (resp) => {
@@ -29,9 +30,10 @@ function getResponse(jsonRes) {
         console.log(`Error: ${err.message}`);
       });
       break;
+
     case 'buy':
       url = `${apiUrl}/cart`;
-      http.post(url, {headers: {'Authorization': jsonRes.token}}(resp) => {
+      http.post(url, {headers: {'Authorization': jsonRes.token}},(resp) => {
         let data = '';
 
         resp.on('data', (chunk) => {
@@ -50,16 +52,18 @@ function getResponse(jsonRes) {
         console.log(`Error: ${err.message}`);
       });
       break;
+
     case 'category':
       url = `${url}/categorias`;
       break;
+
     case 'signup':
       url = `${apiUrl}/signup`;
       var signupBody = {
         "email": jsonRes.user,
         "password": jsonRes.password
       }
-      http.post(url {body: signupBody}, (resp) => {
+      http.post(url,{body: signupBody}, (resp) => {
         let data = '';
 
         resp.on('data', (chunk) => {
@@ -77,13 +81,14 @@ function getResponse(jsonRes) {
         console.log(`Error: ${err.message}`);
       });
       break;
+
     case 'signin':
       url = `${apiUrl}/signin`;
       var signinBody = {
         "email": jsonRes.user,
         "password": jsonRes.password
       }
-      http.post(url {body: signinBody}, (resp) => {
+      http.post(url, {body: signinBody}, (resp) => {
         let data = '';
 
         resp.on('data', (chunk) => {
@@ -116,7 +121,7 @@ module.exports = {
     const ul = u0[0].split(/\s+/);
     console.log(ul);
     console.log(ul[0]);
-    
+
     // Receive extra information in case it's needed in the future
     const t0 = body.split('\n');
     let jsonB;
