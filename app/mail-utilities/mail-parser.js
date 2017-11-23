@@ -1,12 +1,13 @@
 const sender = require('./mail-sender');
 const http = require('http');
+const SECRET = "tremendosecreto";
 
 function getResponse(jsonRes) {
   //let baseUrl = process.env.QUEUE_URL || 'http://arqss14.ing.puc.cl';
   let baseUrl = 'http://arqss17.ing.puc.cl';
   baseUrl += ':3000';
   let url = baseUrl;
-  let apiUrl = 'https://arqss4.ing.puc.cl/api';
+  let apiUrl = 'https://arqss4.ing.puc.cl/api/external';
   console.log(jsonRes.action);
   switch (jsonRes.action) {
 
@@ -33,7 +34,13 @@ function getResponse(jsonRes) {
 
     case 'buy':
       url = `${apiUrl}/cart`;
-      http.post(url, {headers: {'Authorization': jsonRes.token}},(resp) => {
+      http.post(url,
+        {
+          headers: {
+            "Authorization": SECRET,
+            "Email": jsonRes.user
+          }}
+        ,(resp) => {
         let data = '';
 
         resp.on('data', (chunk) => {
